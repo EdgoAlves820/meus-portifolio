@@ -1,0 +1,116 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Open+Sans:wght@300;400;700&display=swap'); */
+
+* {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+}
+
+body {
+   align-items: center;
+   background-repeat: no-repeat;
+   background-size: cover;
+   background: url(../img/ponte-aracaju-barra.jpg);
+   display: flex;
+   font-family: "Montserrat", sans-serif;
+   height: 100vh;
+   justify-content: center;
+}
+
+h2 {
+   color: #fff;
+   font-size: 30px;
+   margin: 20px;
+   text-align: center;
+}
+
+.container {
+   background: rgba(0, 0, 0, 0.527);
+   border-radius: 20% 0;
+   box-shadow: 1px 2px 10px #000, 3px 6px 20px #000;
+   padding: 65px 20px;
+   width: 320px;
+}
+
+input {
+   background: transparent;
+   border: none;
+   border-bottom: 1px solid #fff;
+   color: #fff;
+   height: 40px;
+   outline: none;
+   transition: .25s ease-in-out;
+   width: 100%;
+}
+
+.input-field {
+   margin-bottom: 20px;
+   position: relative;
+}
+
+label {
+   color: #fff;
+   left: 0;
+   position: absolute;
+   top: 0;
+   transform: translateY(18px);
+   transition: .25s ease-in-out;
+}
+
+input:focus {
+   border-bottom: 2px solid blue;
+   box-shadow: 0 1px 0 0 blue;
+}
+
+input:focus + label {
+   color: blue;
+   font-weight: bold;
+   transform: translateY(-14px) scale(.8);
+}
+
+input:not(:placeholder-shown) + label {
+   color: blue;
+   font-weight: bold;
+   transform: translateY(-14px) scale(.8);
+}
+
+input:not(:placeholder-shown) {
+   border-bottom: 2px solid blue;
+   box-shadow: 0 1px 0 0 blue;
+}
+
+input::placeholder {
+   color: transparent
+}
+
+button {
+   background: transparent;
+   border: 2px solid #fff;
+   border-radius: 20px;
+   color: #fff;
+   cursor: pointer;
+   margin: 20px;
+   padding: 15px 50px;
+   text-transform: uppercase;
+   transition: ease-in-out .25s;
+}
+
+button:hover {
+   background: rgba(19, 19, 230, 0.911);
+   
+}
+
+.btn {
+   text-align: center;
+}
+
+a {
+   color: #fff;
+   text-align: center;
+   text-decoration: none;
+   transition: ease-in-out .25s;
+}
+
+a:hover {
+   color: blue;
+}
