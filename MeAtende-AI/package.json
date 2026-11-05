@@ -1,0 +1,16 @@
+{
+  "name": "meatende-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Protótipo front-end de atendimento para clínicas, com IA simulada e atendimento humano.",
+  "author": "DevFeraBoy820",
+  "scripts": {
+    "build": "node build-standalone.cjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
