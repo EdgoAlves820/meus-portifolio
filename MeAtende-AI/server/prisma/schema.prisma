@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Clinic {
+  id           String        @id @default(uuid())
+  name         String
+  segment      String        @default("Clínicas")
+  phone        String        @default("")
+  address      String        @default("")
+  greeting     String        @default("")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  users        User[]
+  patients     Patient[]
+  doctors      Doctor[]
+  apptTypes    AppointmentType[]
+  appointments Appointment[]
+  setting      Setting?
+  integrations Integration[]
+  auditLogs    AuditLog[]
+}
+
+model User {
+  id            String         @id @default(uuid())
+  clinicId      String
+  email         String         @unique
+  passwordHash  String
+  name          String
+  role          String         @default("ATENDENTE")
+  active        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  clinic        Clinic         @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  refreshTokens RefreshToken[]
+  auditLogs     AuditLog[]
+
+  @@index([clinicId])
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Patient {
+  id           String        @id @default(uuid())
+  clinicId     String
+  name         String
+  phone        String        @default("")
+  email        String        @default("")
+  notes        String        @default("")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  clinic       Clinic        @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@index([clinicId])
+}
+
+model Doctor {
+  id       String        @id @default(uuid())
+  clinicId String
+  name     String
+  spec     String        @default("")
+  active   Boolean       @default(true)
+  clinic   Clinic        @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@index([clinicId])
+}
+
+model AppointmentType {
+  id       String   @id @default(uuid())
+  clinicId String
+  name     String
+  duration Int      @default(45)
+  price    Int      @default(0)
+  color    String   @default("#2D8182")
+  clinic   Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@index([clinicId])
+}
+
+model Appointment {
+  id          String           @id @default(uuid())
+  clinicId    String
+  patientId   String?
+  patientName String
+  doctorId    String?
+  typeId      String?
+  date        String
+  time        String
+  duration    Int              @default(45)
+  status      String           @default("confirmed")
+  source      String           @default("manual")
+  notes       String           @default("")
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  clinic      Clinic           @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patient     Patient?         @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  doctor      Doctor?          @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  type        AppointmentType? @relation(fields: [typeId], references: [id], onDelete: SetNull)
+
+  @@index([clinicId, date])
+}
+
+model Setting {
+  id          String  @id @default(uuid())
+  clinicId    String  @unique
+  exchangeUsd Float   @default(0.185)
+  exchangeEur Float   @default(0.17)
+  autopilot   Boolean @default(true)
+  clinic      Clinic  @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+}
+
+model Integration {
+  id       String  @id @default(uuid())
+  clinicId String
+  provider String
+  enabled  Boolean @default(false)
+  mode     String  @default("sandbox")
+  config   String  @default("{}")
+  clinic   Clinic  @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+
+  @@unique([clinicId, provider])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  clinicId  String
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  meta      String   @default("{}")
+  ip        String   @default("")
+  createdAt DateTime @default(now())
+  clinic    Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([clinicId, createdAt])
+}
