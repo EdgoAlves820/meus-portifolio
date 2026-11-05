@@ -1,2 +1,2 @@
-# meus-portifolio
-Aqui será colocado meus projetos
+## • meus-portifolio
+Aqui serão colocados os meus projetos
